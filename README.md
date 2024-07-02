@@ -1,6 +1,6 @@
 # Dockerize osrm and nominatim
 
-##Install
+## Install
 
 1. ``docker pull osrm/osrm-backend:latest``
 2. ``cd osrm_data``
@@ -12,18 +12,18 @@
 
 
 
-###Note : It may take up to half an hour to execute the bill nominatim service
+### Note : It may take up to half an hour to execute the bill nominatim service
 
 -----
 ##Update
 
-###out of container:
+### out of container:
 
 ``docker exec -it nominatim sudo -u nominatim nominatim replication --project-dir /nominatim
 ``
 
 
-###in container:
+### in container:
 
 ``sudo -u nominatim nominatim replication --project-dir /nominatim
 ``
