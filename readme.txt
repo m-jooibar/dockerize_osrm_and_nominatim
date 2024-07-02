@@ -12,7 +12,10 @@ note : It may take up to half an hour to execute the bill nominatim service
 -----
 Update
 
+out of container:
 docker exec -it nominatim sudo -u nominatim nominatim replication --project-dir /nominatim
+
+in container:
 sudo -u nominatim nominatim replication --project-dir /nominatim
 
 
