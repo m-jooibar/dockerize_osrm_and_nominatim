@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  postgis:
+    image: postgis/postgis:16-3.4
+    container_name: postgis
+    environment:
+      POSTGRES_DB: nominatim
+      POSTGRES_USER: nominatim
+      POSTGRES_PASSWORD: nominatim_123456
+    volumes:
+      - ./postgis/postgis_data:/var/lib/postgresql/data
+      - ./postgis/postgis_configs/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
+      - ./postgis/postgis_init/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+
+  nominatim:
+    image: mediagis/nominatim:4.4
+    container_name: nominatim
+    depends_on:
+      - postgis
+    environment:
+      POSTGRES_HOST: postgis
+      REPLICATION_URL: "https://download.geofabrik.de/asia/iran-updates/"
+      POSTGRES_DB: nominatim
+      POSTGRES_USER: nominatim
+      POSTGRES_PASSWORD: nominatim_123456
+      PBF_PATH: /data/iran-latest.osm.pbf
+      NOMINATIM_IMPORT_WIKIPEDIA: false
+    volumes:
+      - nominatim_data:/var/lib/postgresql/12/main
+      - ./osrm_data:/data
+    ports:
+      - "8080:8080"
+
+  osrm:
+    image: osrm/osrm-backend:latest
+    container_name: osrm
+    command: osrm-routed --algorithm mld /data/iran-latest.osrm
+    volumes:
+      - ./osrm_data:/data
+    ports:
+      - "5000:5000"
+
+volumes:
+  postgis_data:
+  nominatim_data:
+
+
